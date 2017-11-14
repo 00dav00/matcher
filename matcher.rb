@@ -1,14 +1,23 @@
 class Matcher
+  OPERATIONS = [:==, :>, :>=, :<, :<=]
+
   def initialize(original_value)
     @original_value = original_value
   end
 
   def to(expected_value:, operation:)
+    check_operation!(operation)
     check_comparability!(operation)
     compare!(expected_value, operation)
   end
 
   private
+
+  def check_operation!(operation)
+    unless OPERATIONS.include?(operation)
+      raise ArgumentError, 'Error!, Operation not allowed'
+    end
+  end
 
   def check_comparability!(operation)
     unless @original_value.respond_to?(operation)
